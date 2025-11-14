@@ -1,5 +1,6 @@
 const urlService = require("../services/urlService");
 const { createUrlSchema } = require("../validators/urlValidator");
+const notificationService = require("../services/notificationService");
 
 // Create short URL
 exports.createShortUrl = async (req, res) => {
@@ -77,7 +78,14 @@ exports.redirectToOriginal = async (req, res) => {
 
     if (!shortUrl.isActive) return res.status(410).send("Short URL is disabled");
 
-    if (shortUrl.isExpired()) return res.status(410).send("Short URL expired");
+    if (shortUrl.isExpired()){
+        await notificationService.createNotification(
+        shortUrl.user,
+        "Short URL Expired",
+        `Your short URL (${shortUrl.shortUrl}) has expired.`
+        );
+    return res.status(410).send("Short URL expired");
+    } 
 
     await urlService.recordClick(shortUrl, req);
 

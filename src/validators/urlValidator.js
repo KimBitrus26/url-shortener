@@ -1,7 +1,7 @@
 const Joi = require("joi");
 
 const createUrlSchema = Joi.object({
-    
+
   originalUrl: Joi.string()
     .uri({ scheme: ["http", "https"] })
     .required()
@@ -21,7 +21,14 @@ const createUrlSchema = Joi.object({
       "string.max": "customAlias must not exceed 30 characters",
     }),
 
-  expiresAt: Joi.date().optional()
+  expiresAt: Joi.date()
+    .greater("now")               // must be in the future
+    .min(new Date(Date.now() + 24 * 60 * 60 * 1000))  // +1 day
+    .optional()
+    .messages({
+      "date.greater": "expiresAt must be a future date",
+      "date.min": "expiresAt must be at least 1 day from now",
+    })
 });
 
 module.exports = {

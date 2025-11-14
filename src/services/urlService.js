@@ -1,6 +1,7 @@
 const ShortUrl = require("../models/ShortUrl");
 const crypto = require("crypto");
 const generateRandomUrlCode = require("./utils").generateRandomUrlCode;
+const notificationService = require("./notificationService");
 
 
 exports.createShortUrl = async (data) => {
@@ -32,6 +33,12 @@ exports.createShortUrl = async (data) => {
     expiresAt: expiresAt ? new Date(expiresAt) : null,
     user: userId,
   });
+
+  await notificationService.createNotification(
+        userId,
+        "Short URL Created",
+        `Your short URL (${newUrl.shortUrl}) has been created successfully.`
+        );
 
   return newUrl;
 };
@@ -76,6 +83,14 @@ exports.recordClick = async (shortUrl, req) => {
   };
 
   await shortUrl.recordClick(clickData);
+
+    // Notify user of click
+   await notificationService.createNotification(
+    shortUrl.user,
+    "Short URL Clicked",
+    `Your short URL (${shortUrl.shortUrl}) was clicked.`
+  );
+
 };
 
 

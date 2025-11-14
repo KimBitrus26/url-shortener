@@ -4,6 +4,7 @@ const cors = require("cors");
 require("dotenv").config();
 const indexRouter = require("./src/routes/index");
 const urlRoutes = require("./src/routes/urlRoutes");
+const notificationRoutes = require("./src/routes/notificationRoutes");
 const { redirectToOriginal } = require("./src/controllers/urlController");
 
 const app = express();
@@ -14,6 +15,7 @@ app.use(cookieParser());
 app.use(cors());
 app.use('/api', indexRouter);
 app.use("/api/urls", urlRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 app.get("/:code", redirectToOriginal);
 
