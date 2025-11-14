@@ -30,9 +30,14 @@ const hashToken = (token) =>{
   return crypto.createHash("sha256").update(token).digest("hex");
 }
 
+function generateRandomUrlCode() {
+  return crypto.randomBytes(4).toString("hex"); // e.g. abcd1234
+}
+
 module.exports = {
   generateAccessToken,
   hashToken,
   setRefreshTokenCookie,
   generateRandomToken,
+  generateRandomUrlCode,
 };

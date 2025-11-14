@@ -5,8 +5,8 @@ const router = express.Router();
 const { loginLimiter, refreshLimiter } = require("../middleware/rateLimiter");
 const { protect } = require("../middleware/authMiddleware");
 
-const authController = require('../controllers/authController')
-const userController = require('../controllers/userController')
+const authController = require('../controllers/authController');
+const userController = require('../controllers/userController');
 
 
 router.route('/').get((req, res) => res.json(

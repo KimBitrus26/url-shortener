@@ -226,7 +226,7 @@ const  resetPassword = async (token, newPassword, ipAddress) => {
   resetToken.usedByIp = ipAddress;
   await resetToken.save();
 
-  // Optional: Revoke all refresh tokens for security (force re-login on all devices)
+  // Revoke all refresh tokens for security (force re-login on all devices)
   await RefreshToken.updateMany(
     { user: user._id, revokedAt: null },
     { revokedAt: new Date(), revokedByIp: ipAddress }

@@ -24,4 +24,16 @@ const refreshLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-module.exports = { loginLimiter, refreshLimiter };
+// general ratelimitter for all endpoints
+const generalLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: {
+    success: false,
+    message: "Too many requests from this IP, please try again later.",
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+module.exports = { loginLimiter, refreshLimiter, generalLimiter };

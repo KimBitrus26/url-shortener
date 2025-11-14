@@ -3,6 +3,8 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 require("dotenv").config();
 const indexRouter = require("./src/routes/index");
+const urlRoutes = require("./src/routes/urlRoutes");
+const { redirectToOriginal } = require("./src/controllers/urlController");
 
 const app = express();
 
@@ -11,6 +13,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors());
 app.use('/api', indexRouter);
+app.use("/api/urls", urlRoutes);
+
+app.get("/:code", redirectToOriginal);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
