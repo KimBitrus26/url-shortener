@@ -16,11 +16,14 @@ exports.getNotificationCount = async (req, res) => {
 // Retrieve  user Notifications
 exports.getNotifications = async (req, res) => {
   try {
-    const notifications = await notificationService.getNotifications(req.user._id);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    const notifications = await notificationService.getNotifications(req.user._id, page, limit);
     res.json({ 
         success: true, 
         message: "Notifications retrieved successfully",
-        data: notifications });
+        ...notifications });
   } catch (err) {
     res.status(500).json({ success: false, message: err.message });
   }

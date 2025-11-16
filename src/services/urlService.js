@@ -2,7 +2,8 @@ const ShortUrl = require("../models/ShortUrl");
 const crypto = require("crypto");
 const generateRandomUrlCode = require("./utils").generateRandomUrlCode;
 const notificationService = require("./notificationService");
-
+const redis = require("../config/redis");
+const { clearUrlCache } = require("./utils");
 
 exports.createShortUrl = async (data) => {
   const { originalUrl, customAlias, expiresAt, userId } = data;
@@ -40,11 +41,20 @@ exports.createShortUrl = async (data) => {
         `Your short URL (${newUrl.shortUrl}) has been created successfully.`
         );
 
+    await clearUrlCache(userId);
+
   return newUrl;
 };
 
 exports.getUserUrls = async (userId, page = 1, limit = 10) => {
   const skip = (page - 1) * limit;
+
+  const cacheKey = `urls:${userId}:page:${page}:limit:${limit}`;
+  const cachedData = await redis.get(cacheKey);
+  if (cachedData) {
+    console.log("Cache hit for user URLs");
+    return JSON.parse(cachedData);
+  }
 
   // Query data
   const urls = await ShortUrl.find({ user: userId })
@@ -55,13 +65,19 @@ exports.getUserUrls = async (userId, page = 1, limit = 10) => {
   // Count documents
   const total = await ShortUrl.countDocuments({ user: userId });
 
-  return {
+  const response = {
     total,
     page,
     limit,
     totalPages: Math.ceil(total / limit),
     data: urls
   };
+
+  // Save to cache (TTL = 10 minutes)
+  const TTL_SECONDS = 600;
+  await redis.set(cacheKey, JSON.stringify(response),  "EX", TTL_SECONDS );
+
+  return response;
 };
 
 

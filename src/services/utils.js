@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
+const redis = require("../config/redis");
 
 
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -34,10 +35,49 @@ function generateRandomUrlCode() {
   return crypto.randomBytes(4).toString("hex"); // e.g. abcd1234
 }
 
+
+const clearCacheByPattern = async (pattern) => {
+  let cursor = "0";
+  const toDelete = [];
+
+  do {
+    const [newCursor, keys] = await redis.scan(
+      cursor,
+      "MATCH",
+      pattern,
+      "COUNT",
+      100
+    );
+
+    cursor = Number(newCursor);
+
+    if (keys.length > 0) {
+      const normalized = keys.map(String);
+      toDelete.push(...normalized);
+    }
+
+  } while (cursor !== 0);
+
+  if (toDelete.length > 0) {
+    await redis.del(...toDelete);
+  }
+};
+
+const clearUrlCache = async (userId) => {
+  await clearCacheByPattern(`urls:${userId}:*`);
+};
+
+const clearNotificationCache = async (userId) => {
+  await clearCacheByPattern(`notifications:${userId}:*`);
+};
+
+
 module.exports = {
   generateAccessToken,
   hashToken,
   setRefreshTokenCookie,
   generateRandomToken,
   generateRandomUrlCode,
+  clearUrlCache,
+  clearNotificationCache,
 };
