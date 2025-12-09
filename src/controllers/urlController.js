@@ -69,6 +69,7 @@ exports.getMyUrls = async (req, res) => {
 
 // Public redirect
 exports.redirectToOriginal = async (req, res) => {
+  
   try {
     const { code } = req.params;
     if (!code) return res.status(400).send("Code is required");

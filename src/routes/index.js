@@ -20,15 +20,15 @@ router.route('/').get((req, res) => res.json(
 ));
 
 // auth routes
-router.route('/register').post(authController.createUser);
+router.route('/auth/register').post(authController.createUser);
 router.route('/auth/login').post(loginLimiter, authController.login);
 router.route('/auth/refresh-token').post(refreshLimiter, authController.refreshToken);
 router.route('/auth/logout').post(authController.logout);
 
 // Password reset routes (public)
-router.post("/forgot-password", authController.forgotPassword);
-router.get("/verify-reset-token/:token", authController.verifyResetToken);
-router.post("/reset-password", authController.resetPassword);
+router.post("/auth/forgot-password", authController.forgotPassword);
+router.get("/auth/verify-reset-token/:token", authController.verifyResetToken);
+router.post("/auth/reset-password", authController.resetPassword);
 
 // Protected user profile route
 router.route('/users/me').get(protect, userController.getUserProfile);

@@ -5,7 +5,7 @@ require("dotenv").config();
 const indexRouter = require("./src/routes/index");
 const urlRoutes = require("./src/routes/urlRoutes");
 const notificationRoutes = require("./src/routes/notificationRoutes");
-const { redirectToOriginal } = require("./src/controllers/urlController");
+const urlController = require("./src/controllers/urlController");
 
 const app = express();
 
@@ -13,12 +13,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(cors());
-app.use('/api', indexRouter);
-app.use("/api/urls", urlRoutes);
-app.use("/api/notifications", notificationRoutes);
+app.use('/api/v1', indexRouter);
+app.use("/api/v1", urlRoutes);
+app.use("/api/v1", notificationRoutes);
 
-app.get("/:code", redirectToOriginal);
-
+app.get("/:code", urlController.redirectToOriginal);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

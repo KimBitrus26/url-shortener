@@ -1,0 +1,658 @@
+openapi: 3.0.0
+info:
+  title: URL Shortener
+  version: 1.0.0
+  description: Url Shorterner API reference
+servers:
+  - url: http://localhost:5000
+paths:
+  /api/v1/auth/register:
+    post:
+      summary: signup API
+      tags: []
+      responses:
+        '201':
+          description: response
+          headers:
+            X-Powered-By:
+              schema:
+                type: string
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Content-Length:
+              schema:
+                type: integer
+            ETag:
+              schema:
+                type: string
+            Date:
+              schema:
+                type: string
+            Connection:
+              schema:
+                type: string
+            Keep-Alive:
+              schema:
+                type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+  /api/v1/auth/login:
+    post:
+      summary: login API
+      tags: []
+      responses:
+        '200':
+          description: response
+          headers:
+            X-Powered-By:
+              schema:
+                type: string
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            RateLimit-Policy:
+              schema:
+                type: string
+            RateLimit-Limit:
+              schema:
+                type: integer
+            RateLimit-Remaining:
+              schema:
+                type: integer
+            RateLimit-Reset:
+              schema:
+                type: integer
+            Set-Cookie:
+              schema:
+                type: string
+            Content-Length:
+              schema:
+                type: integer
+            ETag:
+              schema:
+                type: string
+            Date:
+              schema:
+                type: string
+            Connection:
+              schema:
+                type: string
+            Keep-Alive:
+              schema:
+                type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+  /api/v1/auth/refresh-token:
+    post:
+      summary: Refresh token API
+      tags: []
+      responses:
+        '200':
+          description: response
+          headers:
+            X-Powered-By:
+              schema:
+                type: string
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            RateLimit-Policy:
+              schema:
+                type: string
+            RateLimit-Limit:
+              schema:
+                type: integer
+            RateLimit-Remaining:
+              schema:
+                type: integer
+            RateLimit-Reset:
+              schema:
+                type: integer
+            Set-Cookie:
+              schema:
+                type: string
+            Content-Length:
+              schema:
+                type: integer
+            ETag:
+              schema:
+                type: string
+            Date:
+              schema:
+                type: string
+            Connection:
+              schema:
+                type: string
+            Keep-Alive:
+              schema:
+                type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+  /api/v1/auth/logout:
+    post:
+      summary: Logout API
+      tags: []
+      responses:
+        '200':
+          description: response
+          headers:
+            X-Powered-By:
+              schema:
+                type: string
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Set-Cookie:
+              schema:
+                type: string
+            Content-Length:
+              schema:
+                type: integer
+            ETag:
+              schema:
+                type: string
+            Date:
+              schema:
+                type: string
+            Connection:
+              schema:
+                type: string
+            Keep-Alive:
+              schema:
+                type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+  /api/v1/auth/forgot-password:
+    post:
+      summary: Send Forgot Password API
+      tags: []
+      responses:
+        '200':
+          description: response
+          headers:
+            X-Powered-By:
+              schema:
+                type: string
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Content-Length:
+              schema:
+                type: integer
+            ETag:
+              schema:
+                type: string
+            Date:
+              schema:
+                type: string
+            Connection:
+              schema:
+                type: string
+            Keep-Alive:
+              schema:
+                type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+  /api/v1/auth/verify-reset-token/7d0dab07c75ace7a304ad377a70c0fc75100d6db68932d29c4350821f5de24e9cb4b2832a8d5e9c5fae6fbf5561af1ab8570dc248d037feef1491ce39032f401:
+    get:
+      summary: Verify Reset Password Token API
+      tags: []
+      responses:
+        '200':
+          description: response
+          headers:
+            X-Powered-By:
+              schema:
+                type: string
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Content-Length:
+              schema:
+                type: integer
+            ETag:
+              schema:
+                type: string
+            Date:
+              schema:
+                type: string
+            Connection:
+              schema:
+                type: string
+            Keep-Alive:
+              schema:
+                type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+  /api/v1/auth/reset-password:
+    post:
+      summary: Reset Password API
+      tags: []
+      responses:
+        '200':
+          description: response
+          headers:
+            X-Powered-By:
+              schema:
+                type: string
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Content-Length:
+              schema:
+                type: integer
+            ETag:
+              schema:
+                type: string
+            Date:
+              schema:
+                type: string
+            Connection:
+              schema:
+                type: string
+            Keep-Alive:
+              schema:
+                type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                newPassword:
+                  type: string
+  /api/v1/users/me:
+    get:
+      summary: User Profile API
+      tags: []
+      responses:
+        '200':
+          description: response
+          headers:
+            X-Powered-By:
+              schema:
+                type: string
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Content-Length:
+              schema:
+                type: integer
+            ETag:
+              schema:
+                type: string
+            Date:
+              schema:
+                type: string
+            Connection:
+              schema:
+                type: string
+            Keep-Alive:
+              schema:
+                type: string
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+    patch:
+      summary: Edit User Profile API
+      tags: []
+      responses:
+        '200':
+          description: response
+          headers:
+            X-Powered-By:
+              schema:
+                type: string
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Content-Length:
+              schema:
+                type: integer
+            ETag:
+              schema:
+                type: string
+            Date:
+              schema:
+                type: string
+            Connection:
+              schema:
+                type: string
+            Keep-Alive:
+              schema:
+                type: string
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+  /api/urls/shortener:
+    post:
+      summary: Create URL Shortener
+      tags: []
+      responses:
+        '201':
+          description: response
+          headers:
+            X-Powered-By:
+              schema:
+                type: string
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Content-Length:
+              schema:
+                type: integer
+            ETag:
+              schema:
+                type: string
+            Date:
+              schema:
+                type: string
+            Connection:
+              schema:
+                type: string
+            Keep-Alive:
+              schema:
+                type: string
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                originalUrl:
+                  type: string
+                  format: uri
+                customAlias:
+                  type: string
+                expiresAt:
+                  type: string
+                  format: date
+  /api/v1/shortener/me:
+    get:
+      summary: My URL Shorteners
+      tags: []
+      responses:
+        '200':
+          description: response
+          headers:
+            X-Powered-By:
+              schema:
+                type: string
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Content-Length:
+              schema:
+                type: integer
+            ETag:
+              schema:
+                type: string
+            Date:
+              schema:
+                type: string
+            Connection:
+              schema:
+                type: string
+            Keep-Alive:
+              schema:
+                type: string
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+  /mysweetlink:
+    get:
+      summary: Redirect shortener
+      tags: []
+      responses: {}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+  /api/v1/shortener/analytics/mysweetlink1:
+    get:
+      summary: shortener analytics
+      tags: []
+      responses:
+        '200':
+          description: response
+          headers:
+            X-Powered-By:
+              schema:
+                type: string
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Content-Length:
+              schema:
+                type: integer
+            ETag:
+              schema:
+                type: string
+            Date:
+              schema:
+                type: string
+            Connection:
+              schema:
+                type: string
+            Keep-Alive:
+              schema:
+                type: string
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+  /api/v1/notifications:
+    get:
+      summary: Notifications API
+      tags: []
+      responses:
+        '200':
+          description: response
+          headers:
+            X-Powered-By:
+              schema:
+                type: string
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Content-Length:
+              schema:
+                type: integer
+            ETag:
+              schema:
+                type: string
+            Date:
+              schema:
+                type: string
+            Connection:
+              schema:
+                type: string
+            Keep-Alive:
+              schema:
+                type: string
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+  /api/v1/notifications/count:
+    get:
+      summary: Notifications Count API
+      tags: []
+      responses:
+        '200':
+          description: response
+          headers:
+            X-Powered-By:
+              schema:
+                type: string
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Content-Length:
+              schema:
+                type: integer
+            ETag:
+              schema:
+                type: string
+            Date:
+              schema:
+                type: string
+            Connection:
+              schema:
+                type: string
+            Keep-Alive:
+              schema:
+                type: string
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+  /api/notifications/691755afbbb5f5ea64ef79e9/mark:
+    patch:
+      summary: Notification Mark Read API
+      tags: []
+      responses:
+        '200':
+          description: response
+          headers:
+            X-Powered-By:
+              schema:
+                type: string
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Content-Length:
+              schema:
+                type: integer
+            ETag:
+              schema:
+                type: string
+            Date:
+              schema:
+                type: string
+            Connection:
+              schema:
+                type: string
+            Keep-Alive:
+              schema:
+                type: string
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                isRead:
+                  type: boolean
+  /api/notifications/clear:
+    delete:
+      summary: Clear Notifications API
+      tags: []
+      responses:
+        '200':
+          description: response
+          headers:
+            X-Powered-By:
+              schema:
+                type: string
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+            Content-Length:
+              schema:
+                type: integer
+            ETag:
+              schema:
+                type: string
+            Date:
+              schema:
+                type: string
+            Connection:
+              schema:
+                type: string
+            Keep-Alive:
+              schema:
+                type: string
+      security:
+        - BearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                isRead:
+                  type: boolean
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
