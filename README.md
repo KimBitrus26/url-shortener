@@ -49,7 +49,8 @@ Users can sign up, log in, manage their profiles, reset passwords, and create sh
 - Security	JWT Authentication, Rate Limiter
 - Database	 MongoDB 
 
-### API Documentation
+### API Reference Documentation
+- https://documenter.getpostman.com/view/9698164/2sB3dQw9rX
 
 ### Below is a complete overview of all available API endpoints.
 
