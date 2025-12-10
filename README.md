@@ -58,6 +58,12 @@ Users can sign up, log in, manage their profiles, reset passwords, and create sh
 ##### Register User
 `POST /api/v1/auth/register
 `
+##### Verify phone number
+`POST /api/v1/auth/verify-phone
+`
+##### Resend otp code
+`POST /api/v1/auth/resend-otp
+`
 ##### Login
 `
 POST /api/v1/auth/login
@@ -132,7 +138,7 @@ DELETE /api/v1/notifications/clear
 
 ### Getting Started
 #### Install dependencies
-`
+`bash
 npm install
 `
 #### Create an .env file
@@ -155,8 +161,12 @@ SMTP_PASSWORD=
 EMAIL_FROM="MyApp <noreply@myapp.com>"
 BASE_URL=http://localhost:5000
 REDIS_URL=redis://localhost:6379
+TWILIO_SID=
+TWILIO_TOKEN=
+TWILIO_NUMBER=
+TWILIO_VERIFY_SERVICE_SID=
 `
 #### Run the server
-`
+`bash
 npm run dev
 `

@@ -2,9 +2,12 @@ const User = require("../models/User");
 const authService = require("../services/authService");
 const { generateAccessToken } = require("../services/utils");
 const setRefreshTokenCookie = require("../services/utils").setRefreshTokenCookie;
+const { verifyPhone } = require("../services/verifyPhoneService");
+const { resendOtp } = require("../services/ResendOTPService");
 
 
 const createUser = async (req, res) => {
+  console.log("Create user request body:", req.body);
   
     try {
     const user = await authService.createUser(req.body);
@@ -15,6 +18,7 @@ const createUser = async (req, res) => {
       data: user,
     });
   } catch (error) {
+    console.error("User creation error:", error);
     res.status(400).json({
       success: false,
       message: error.message,
@@ -28,6 +32,7 @@ const login = async (req, res) => {
     const { email, password } = req.body;
     const user = await authService.authenticateUser(email, password); 
     if (!user) return res.status(401).json({ success: false, message: "Invalid credentials" });
+    if (!user.isPhoneVerified) return res.status(401).json({ success: false, message: "Phone number not verified" });
 
     // Generate access token
     const accessToken = generateAccessToken(user);
@@ -195,8 +200,56 @@ const resetPassword = async (req, res) => {
   }
 };
 
+async function verifyPhoneController(req, res) {
+  try {
+    const { code, userId } = req.body;
 
+    if (!code || !userId) {
+      return res.status(400).json({
+        message: "User ID and code are required for phone verification",
+      });
+    }
 
+    const user = await verifyPhone(userId, code);
+
+    return res.status(200).json({
+      success: true,
+      message: "Phone verified successfully",
+      data: user,
+    });
+  } catch (error) {
+    console.error("Phone verification error:", error.message);
+    return res.status(400).json({
+      message: error.message,
+    });
+  }
+}
+
+async function resendOtpController(req, res) {
+  try {
+    const { userId } = req.body
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID is required to resend OTP",
+      });
+    }
+    const result = await resendOtp(userId);
+
+    return res.status(200).json({
+        success: true,
+        message: "OTP code resent successfully",
+        data: result,
+    });
+  } catch (error) {
+    console.error("Resend OTP error:", error.message);
+    return res.status(400).json({
+        success: false,
+        message: error.message,
+
+    });
+  }
+}
 
 module.exports = {
   createUser,
@@ -206,5 +259,7 @@ module.exports = {
   forgotPassword,
   verifyResetToken,
   resetPassword,
+  resendOtpController,
+  verifyPhoneController,
   
 };

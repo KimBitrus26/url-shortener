@@ -24,7 +24,8 @@
     "mongoose": "^8.19.3",
     "morgan": "^1.10.1",
     "nodemailer": "^7.0.10",
-    "redis": "^5.9.0"
+    "redis": "^5.9.0",
+    "twilio": "^5.10.7"
   },
   "devDependencies": {
     "nodemon": "^3.1.11"

@@ -7,16 +7,10 @@ const User = require("../models/User");
 const PasswordResetToken = require('../models/PasswordResetToken')
 const { hashToken, generateRandomToken } = require("./utils");
 const { sendPasswordResetEmail, sendPasswordChangedEmail } = require('./emailService')
+const OtpCode = require("../models/OtpCode");
+const { sendOtpSmsTwilio } = require("../config/twilioSMS");
 
 const REFRESH_DAYS = Number(process.env.REFRESH_TOKEN_EXPIRES_DAYS || 30);
-
-// Joi validation schema
-const userValidationSchema = Joi.object({
-  name: Joi.string().min(2).max(50).required(),
-  email: Joi.string().email().required(),
-  password: Joi.string().min(6).required(),
-});
-
 
 // create & persist refresh token record (store hash)
 async function createRefreshToken(userId, ipAddress) {
@@ -101,16 +95,16 @@ async function revokeRefreshToken(tokenPlain, ipAddress) {
 
 
 const createUser = async (userData) => {
-  // Validate input
-  const { error } = userValidationSchema.validate(userData);
-  if (error) {
-     throw new Error(error.details[0].message);
-  }
 
   //  Check if email exists
   const existingUser = await User.findOne({ email: userData.email });
   if (existingUser) throw new Error("Email already registered");
-
+ 
+  // check if phone number exists
+  const phoneExists = await User.findOne({ phone: userData.phone });  
+  if (phoneExists) {
+    throw new Error("Phone number already in use");
+  }
   // Hash password
   const salt = await bcrypt.genSalt(10);
   const hashedPassword = await bcrypt.hash(userData.password, salt);
@@ -119,10 +113,23 @@ const createUser = async (userData) => {
   const user = new User({
     name: userData.name,
     email: userData.email,
+    countryCode: userData.countryCode,
+    phone: userData.phone,
     password: hashedPassword,
   });
 
   await user.save();
+  
+  const countryCode = user.countryCode;
+  const phoneNumber = user.phone;
+  
+  const otp = await OtpCode.create({
+    user: user._id,
+    country_code: countryCode,
+    phone_number: phoneNumber
+  });
+
+  await sendOtpSmsTwilio(otp.code, countryCode, phoneNumber);
 
   // Remove password before returning
   const userObj = user.toObject();
