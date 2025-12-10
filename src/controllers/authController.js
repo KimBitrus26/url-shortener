@@ -7,8 +7,7 @@ const { resendOtp } = require("../services/ResendOTPService");
 
 
 const createUser = async (req, res) => {
-  console.log("Create user request body:", req.body);
-  
+
     try {
     const user = await authService.createUser(req.body);
 

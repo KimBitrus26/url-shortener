@@ -138,13 +138,13 @@ DELETE /api/v1/notifications/clear
 
 ### Getting Started
 #### Install dependencies
-`bash
+```bash
 npm install
-`
+```
 #### Create an .env file
 
 - Include variables such as:
-`
+```
 PORT=5000
 MONGO_URI=
 NODE_ENV=development
@@ -160,13 +160,27 @@ SMTP_USER=
 SMTP_PASSWORD=
 EMAIL_FROM="MyApp <noreply@myapp.com>"
 BASE_URL=http://localhost:5000
-REDIS_URL=redis://localhost:6379
+REDIS_URL=redis://localhost:6379(dev) or redis://redid:6379(prod)
 TWILIO_SID=
 TWILIO_TOKEN=
 TWILIO_NUMBER=
 TWILIO_VERIFY_SERVICE_SID=
-`
+```
 #### Run the server
-`bash
+
+##### Development server
+```bash
 npm run dev
-`
+```
+- Make sure redis server is running on your local machine:
+```bash
+redis-server
+```
+##### Production server
+```bash
+docker-compose up -d --build
+```
+- Or
+```bash
+sudo docker-compose up -d --build
+```
