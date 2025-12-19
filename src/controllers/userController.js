@@ -48,6 +48,8 @@ const updateUserProfile = async (req, res) => {
       id: updatedUser._id,
       name: updatedUser.name,
       email: updatedUser.email,
+      countryCode: updatedUser.countryCode,
+      phone: updatedUser.phone,
       createdAt: updatedUser.createdAt,
       updatedAt: updatedUser.updatedAt
     };

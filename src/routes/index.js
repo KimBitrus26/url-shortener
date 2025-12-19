@@ -5,6 +5,7 @@ const router = express.Router();
 const { loginLimiter, refreshLimiter } = require("../middleware/rateLimiter");
 const { protect } = require("../middleware/authMiddleware");
 const { userSignupValidation, loginValidation, forgotPasswordEmailValidation, resetPasswordValidation } = require("../validators/authValidators")
+const { profileUpdateValidation } = require("../validators/userValidators");
 const validate = require("../middleware/validate");
 
 const authController = require('../controllers/authController');
@@ -38,7 +39,7 @@ router.post("/auth/resend-otp", authController.resendOtpController);
 
 // Protected user profile route
 router.route('/users/me').get(protect, userController.getUserProfile);
-router.route('/users/me').patch(protect, userController.updateUserProfile);
+router.route('/users/me').patch(protect, validate(profileUpdateValidation), userController.updateUserProfile);
 
 
 module.exports = router;
