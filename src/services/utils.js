@@ -18,7 +18,7 @@ const  setRefreshTokenCookie = (res, token) => {
     httpOnly: true,
     secure: isSecure,
     sameSite: "Strict",
-    path: "/api/auth", // limit cookie scope to auth endpoints (optional)
+    path: "/api/v1/auth", // limit cookie scope to auth endpoints (optional)
     maxAge: Number(process.env.REFRESH_TOKEN_EXPIRES_DAYS || 30) * 24 * 60 * 60 * 1000
   });
 }

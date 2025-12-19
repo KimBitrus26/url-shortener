@@ -13,7 +13,7 @@ const createUser = async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: "User created successfully",
+      message: "User created successfully. OTP sent to phone for verification.",
       data: user,
     });
   } catch (error) {
@@ -56,6 +56,7 @@ const refreshToken = async (req, res) => {
   try {
     const cookieName = process.env.REFRESH_TOKEN_COOKIE_NAME || "jid";
     const token = req.cookies[cookieName];
+    
     if (!token) return res.status(401).json({ success: false, message: "No refresh token" });
 
     // verify & rotate
